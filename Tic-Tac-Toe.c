@@ -154,7 +154,6 @@ char checkwinner()
  return ' ';
 }
 
-
 void gamerecord(char winner)
 {
     FILE *file = fopen("score.csv", "r");  
@@ -163,32 +162,31 @@ void gamerecord(char winner)
 
     while (fgets(buffer,sizeof(buffer),file))
     {
-        int playerscore,computerscore,draws;
+        int playerscore,computerscore,playerloses,computerloses,draws;
         buffer[strcspn(buffer, "\n")] = 0;
-        sscanf(buffer, "%d,%d,%d",&playerscore,&computerscore,&draws);
+        sscanf(buffer, "%d,%d,%d,%d,%d",&playerscore,&computerscore,&playerloses,&computerloses,&draws);
 
         if(winner==PLAYER)
         {
         playerscore=playerscore+1;
-        fprintf(temp,"%d,%d,%d",playerscore,computerscore,draws);
-        printf("The player has won %d times so far.",playerscore);
+        computerloses=computerloses+1;
+        fprintf(temp,"%d,%d,%d,%d,%d", playerscore,computerscore,playerloses,computerloses,draws);
+        printf("The player has won %d times so far, lost %d times so far.",playerscore,playerloses);
         
-        break;
         }
         else if(winner==COMPUTER)
         {
         computerscore=computerscore+1;
-        fprintf(temp,"%d,%d,%d",playerscore,computerscore,draws);
-        printf("The Computer has won %d times so far.",computerscore);
-        break;
-
+        playerloses=playerloses+1;
+        fprintf(temp,"%d,%d,%d,%d,%d", playerscore,computerscore,playerloses,computerloses,draws);
+        printf("The Computer has won %d times so far, lost %d times so far.",computerscore,computerloses);
         }
+        
         else
         {
         draws=draws+1;
-        fprintf(temp,"%d,%d,%d",playerscore,computerscore,draws);
+        fprintf(temp,"%d,%d,%d,%d,%d", playerscore,computerscore,playerloses,computerloses,draws);
         printf("It has been %d draws so far.",draws);
-        break;
         }
         
     }
